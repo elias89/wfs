@@ -7,14 +7,15 @@
 
   let currentPath = null;
 
-  let onFileSelection = (file) => {
-    console.log(file)
-
+  let onFileNavigate = (file) => {
     if (file.isFile) return;
 
+    goto(`/?goto=${file.path}`);
+  }
+  
 
-
-    goto(`/?goto=${file.path}`)
+  let onFileSelection = (event) => {
+    event.target.focus({focusVisible: true});
   }
 
   let goBack = () => {
@@ -37,10 +38,7 @@
   });
 
   onMount(() => {
-    
-    console.log('data>>', page.url.searchParams.get('goto'))
-
-
+    console.log(page.data)
   })
 </script>
 <div class="wfs">
@@ -55,8 +53,13 @@
       </div>
       {/if}
       {#each page.data.files as file }
-        <div class="wfs-file" on:dblclick={()=>onFileSelection(file)} class:isFile={file.isFile}>
-          {file.name}
+        <div class="wfs-file" on:dblclick={()=>onFileNavigate(file)} on:click={onFileSelection} class:isFile={file.isFile} id={file.name} tabindex="1">
+
+          <div class="wfs-file-name" class:wfs-hiddenFile={file.isHiddenFile}>
+            {file.name}
+          </div>
+
+          <div class="wfs-file-date" title="Date modified">{file.modifiedDate}</div>
         </div>
       {/each}
     </div>
@@ -100,6 +103,9 @@
       padding: 2px 6px;
       border-radius: var(--borderRadius--regular);
       overflow: hidden;
+      justify-content: space-between;
+      border: 1px solid transparent;
+      // outline: 1px solid var(--color--primary);
 
       &.isFile {
         color: var(--color--file);
@@ -108,6 +114,13 @@
         background-color: var(--color--primary);
         color: black;
       }
+      &:focus {
+        border-color: var(--color--primary);
+      }
+    }
+
+    &-hiddenFile {
+      opacity: .7;;
     }
   }
 </style>

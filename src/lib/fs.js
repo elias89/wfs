@@ -21,7 +21,8 @@ export const readDir = (currentPath) => {
         isFile: item.isFile(),
         modifiedDate: stats.mtime.toLocaleString(), // Last modified date
         creationDate: stats.birthtime.toLocaleString(), // Creation date
-        path: join(relativePath, item.name)
+        path: join(relativePath, item.name),
+        isHiddenFile: item.name.startsWith('.')
       }
     });
     files.sort((a,b)=> {
