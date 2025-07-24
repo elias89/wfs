@@ -30,7 +30,7 @@ This is being developed with Svelte + SvelteKit
 
 **Development**
 ```
-// After clining the project
+// After cloning the project
 npm i
 npm run dev -- --open
 ```
