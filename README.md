@@ -25,3 +25,12 @@ I have tested other options but none of them was fitting 100% my needs so here I
 
 ## Tech specs
 This is being developed with Svelte + SvelteKit
+
+## Usage
+
+**Development**
+```
+// After clining the project
+npm i
+npm run dev -- --open
+```
