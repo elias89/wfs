@@ -15,5 +15,13 @@ I have tested other options but none of them was fitting 100% my needs so here I
 - Agnostic
 
 
+## Incoming features
+- Keyboard navigation
+- Copy/Move/Rename/Remove
+- File properties view
+- File permissions edit
+- Dual pane view mode
+- Themes
+
 ## Tech specs
 This is being developed with Svelte + SvelteKit
