@@ -4,15 +4,24 @@
   import { onMount } from "svelte";
   import { goto, afterNavigate } from "$app/navigation";
   import { page } from '$app/state';
+  import { config } from '$lib/utils';
 
   let currentPath = null;
+  let displayHiddenFiles = true;
+
+  let filteredFiles = [];
+
+  let applyFileFilters = () => {
+    filteredFiles = page.data.files?.filter(file => {
+      return displayHiddenFiles || !file.isHiddenFile
+    });
+  }
 
   let onFileNavigate = (file) => {
     if (file.isFile) return;
 
     goto(`/?goto=${file.path}`);
   }
-  
 
   let onFileSelection = (event) => {
     event.target.focus({focusVisible: true});
@@ -20,7 +29,7 @@
 
   let goBack = () => {
     const previousPath = getPreviousPath();
-    debugger
+
     goto(previousPath.length? `/?goto=${previousPath}`: '/');
   }
 
@@ -33,17 +42,34 @@
     return pathSegments.join('/');
   }
 
+  let toggleHiddenFiles = () => {
+    config.setHiddenFiles(displayHiddenFiles);
+    applyFileFilters();
+  }
+
+  let loadConfigs = () => {
+    displayHiddenFiles = config.getStoredConfigs().displayHiddenFiles;
+  }
   afterNavigate(()=> {
     currentPath = page.url.searchParams?.get('goto') || null;
+    applyFileFilters();
   });
 
   onMount(() => {
-    console.log(page.data)
+    loadConfigs();
+    applyFileFilters();
+    console.log(page.data);
   })
 </script>
 <div class="wfs">
   <div class="wfs-toolbar">
-    <div class="wfs-path">{currentPath || '/'}</div>
+    <div class="wfs-toolbar--left wfs-path">{currentPath || '/'}</div>
+    <div class="wfs-toolbar--right">
+      <label for="hiddenFiles">
+        Hidden files
+        <input type="checkbox" id="hiddenFiles" bind:checked={displayHiddenFiles} on:change={toggleHiddenFiles}>
+      </label>
+    </div>
   </div>
   <div class="wfs-main">
     <div class="wfs-pane">
@@ -52,7 +78,7 @@
         ..
       </div>
       {/if}
-      {#each page.data.files as file, index }
+      {#each filteredFiles as file, index }
         <div class="wfs-file" on:dblclick={()=>onFileNavigate(file)} on:click={onFileSelection} class:isFile={file.isFile} id={file.name} tabindex={index}>
 
           <div class="wfs-file-name" class:wfs-hiddenFile={file.isHiddenFile}>
@@ -80,6 +106,7 @@
       height: 30px;
       align-items: center;
       flex: none;
+      justify-content: space-between;
     }
     &-path {
       display: flex;
