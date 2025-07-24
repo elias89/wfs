@@ -2,7 +2,8 @@
 
 📌 **Project in very early stages of development**
 
-<img width="723" height="217" alt="image" src="https://github.com/user-attachments/assets/f78c35ad-9d6d-4c6d-80a2-a88294b373a9" />
+
+<img width="740" height="230" alt="image" src="https://github.com/user-attachments/assets/772f1b82-75c1-4e4a-881f-7b76d6d14aa0" />
 
 
 I came with the idea of developing an agnostic web file system that can be installed in any Linux computer. You will be able to mount it in a personal server either cloud, in a Raspi or a NAS and navigate it via web. 
