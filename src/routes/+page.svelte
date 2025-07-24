@@ -1,0 +1,113 @@
+<script>
+  import "./../global.css";
+
+  import { onMount } from "svelte";
+  import { goto, afterNavigate } from "$app/navigation";
+  import { page } from '$app/state';
+
+  let currentPath = null;
+
+  let onFileSelection = (file) => {
+    console.log(file)
+
+    if (file.isFile) return;
+
+
+
+    goto(`/?goto=${file.path}`)
+  }
+
+  let goBack = () => {
+    const previousPath = getPreviousPath();
+    debugger
+    goto(previousPath.length? `/?goto=${previousPath}`: '/');
+  }
+
+  let getPreviousPath = () => {
+    const currentPath = page.url.searchParams?.get('goto') || '';
+    // Separate path segments and remove empties from the split
+    const pathSegments = currentPath?.split('/').filter(segment => segment !== '');
+    pathSegments?.pop();
+
+    return pathSegments.join('/');
+  }
+
+  afterNavigate(()=> {
+    currentPath = page.url.searchParams?.get('goto') || null;
+  });
+
+  onMount(() => {
+    
+    console.log('data>>', page.url.searchParams.get('goto'))
+
+
+  })
+</script>
+<div class="wfs">
+  <div class="wfs-toolbar">
+    <div class="wfs-path">{currentPath || '/'}</div>
+  </div>
+  <div class="wfs-main">
+    <div class="wfs-pane">
+      {#if currentPath}
+      <div class="wfs-file" on:dblclick={()=>goBack()}>
+        ..
+      </div>
+      {/if}
+      {#each page.data.files as file }
+        <div class="wfs-file" on:dblclick={()=>onFileSelection(file)} class:isFile={file.isFile}>
+          {file.name}
+        </div>
+      {/each}
+    </div>
+  </div>
+</div>
+
+<style lang="scss">
+  .wfs {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+
+    &-toolbar {
+      display: flex;
+      background-color: #2e2e2e;
+      padding: 0 var(--spacing--regular);
+      height: 30px;
+      align-items: center;
+    }
+    &-path {
+      display: flex;
+    }
+    &-main {
+      display: flex;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      background-color: #272727;
+    }
+    &-pane {
+      display: flex;
+      width: 100%;
+      padding: var(--spacing--regular);
+      flex-direction: column;
+    }
+    &-file {
+      display: flex;
+      cursor: default;
+      user-select: none;
+      padding: 2px 6px;
+      border-radius: var(--borderRadius--regular);
+      overflow: hidden;
+
+      &.isFile {
+        color: var(--color--file);
+      }
+      &:hover {
+        background-color: var(--color--primary);
+        color: black;
+      }
+    }
+  }
+</style>
