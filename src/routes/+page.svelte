@@ -52,8 +52,8 @@
         ..
       </div>
       {/if}
-      {#each page.data.files as file }
-        <div class="wfs-file" on:dblclick={()=>onFileNavigate(file)} on:click={onFileSelection} class:isFile={file.isFile} id={file.name} tabindex="1">
+      {#each page.data.files as file, index }
+        <div class="wfs-file" on:dblclick={()=>onFileNavigate(file)} on:click={onFileSelection} class:isFile={file.isFile} id={file.name} tabindex={index}>
 
           <div class="wfs-file-name" class:wfs-hiddenFile={file.isHiddenFile}>
             {file.name}
@@ -79,6 +79,7 @@
       padding: 0 var(--spacing--regular);
       height: 30px;
       align-items: center;
+      flex: none;
     }
     &-path {
       display: flex;
@@ -87,7 +88,6 @@
       display: flex;
       flex: 1;
       width: 100%;
-      height: 100%;
       background-color: #272727;
     }
     &-pane {
@@ -105,6 +105,7 @@
       overflow: hidden;
       justify-content: space-between;
       border: 1px solid transparent;
+      flex: none;
       // outline: 1px solid var(--color--primary);
 
       &.isFile {
