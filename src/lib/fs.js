@@ -26,8 +26,13 @@ export const readDir = (currentPath) => {
       }
     });
     files.sort((a,b)=> {
-      if (a.isFile && !b.isFile) return 1; // a is directory, b is file
-      if (!a.isFile && b.isFile) return -1;  // a is file, b is directory
+      // Prioritize hidden files first
+      if (a.isHiddenFile && !b.isHiddenFile) return -1;
+      if (!a.isHiddenFile && b.isHiddenFile) return 1;
+
+      // Folders then files
+      if (a.isFile && !b.isFile) return 1;
+      if (!a.isFile && b.isFile) return -1;
 
       return a.name.localeCompare(b.name); // Sort alphabetically within same type
     });
