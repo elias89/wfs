@@ -63,8 +63,10 @@
 </script>
 <div class="wfs">
   <div class="wfs-toolbar">
-    <div class="wfs-toolbar--left wfs-path">{currentPath || '/'}</div>
-    <div class="wfs-toolbar--right">
+    <div class="wfs-toolbar--left wfs-toolbar-segment wfs-path">
+      <span class="material-symbols-outlined wfs-icon">hard_drive</span>
+      {currentPath || '/'}</div>
+    <div class="wfs-toolbar--right wfs-toolbar-segment">
       <label for="hiddenFiles">
         Hidden files
         <input type="checkbox" id="hiddenFiles" bind:checked={displayHiddenFiles} on:change={toggleHiddenFiles}>
@@ -107,6 +109,11 @@
       align-items: center;
       flex: none;
       justify-content: space-between;
+
+      &-segment {
+        align-items: center;
+        gap: 5px;
+      }
     }
     &-path {
       display: flex;
